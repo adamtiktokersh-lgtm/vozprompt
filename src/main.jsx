@@ -48,7 +48,6 @@ function App() {
       recognition.current?.stop?.();
     };
   }, []);
-  useEffect(() => () => files.forEach(f => URL.revokeObjectURL(f.url)), [files]);
   useEffect(() => () => { if (audioUrl) URL.revokeObjectURL(audioUrl); }, [audioUrl]);
 
   function addImages(event) {
@@ -59,7 +58,7 @@ function App() {
     setFiles(previous => [...previous, ...good.slice(0, Math.max(0, 4 - previous.length)).map(f => ({ name: f.name, url: URL.createObjectURL(f) }))]);
     event.target.value = "";
   }
-  function removeImage(url) { setFiles(current => current.filter(f => f.url !== url)); }
+  function removeImage(url) { setFiles(current => current.filter(f => f.url !== url)); URL.revokeObjectURL(url); }
 
   async function record() {
     if (recording) { recorder.current?.stop(); return; }
